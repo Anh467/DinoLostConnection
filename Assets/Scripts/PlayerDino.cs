@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerDino : MonoBehaviour
@@ -9,22 +10,40 @@ public class PlayerDino : MonoBehaviour
     Animator animator;
     Vector3 direction;
 
+    public static PlayerDino instance;
     // const
     const string ANIMATION_PARAM_isRun = "isRun";
     const string ANIMATION_PARAM_isCrouch = "isCrouch";
 
-    //[SerializeField]
+    [SerializeField]
+    bool isUnTouchable = false;
+
+    [SerializeField]
     float jumpForce = 8f;
-    //[SerializeField]
-    float gravity = 9.81f * 2f;
+    [SerializeField]
+    float gravity = 9.81f * 1.5f;
     // GetAxisRaw
     float horizontal;
 
+    // information
+    public int healContainer { get; private set; } = 3;
+    public int healPoint { get; private set; }
 
     private void Awake()
     {
+        healPoint = healContainer;
+
         character = GetComponent <CharacterController>();
         animator = GetComponent<Animator>();
+
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
     }
     private void OnEnable()
     {
@@ -71,5 +90,24 @@ public class PlayerDino : MonoBehaviour
         character.Move(direction * Time.deltaTime);
     }
 
-
+    // handler heal variable
+    public void TakeDamage(int damage)
+    {
+        if (isUnTouchable) return;
+        healPoint -= damage;
+        if (healPoint <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+    public void IncreaseHeal(int heal)
+    {
+        if(healPoint + heal >= healContainer)
+        {
+            healPoint = healContainer;
+            return;
+        }
+        healPoint += heal;
+    }
+    // 
 }
