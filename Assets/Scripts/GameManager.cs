@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     float gameSpeedIncrease = 0.01f;
     [SerializeField]
     float gameSpeed;
-
+    public float score { get; private set; }
 
     public float getGameSpeed() => gameSpeed;
     private void Awake()
@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        score += Time.deltaTime;
         gameSpeed += gameSpeedIncrease * Time.deltaTime;
     }
 }

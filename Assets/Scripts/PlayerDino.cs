@@ -126,4 +126,9 @@ public class PlayerDino : MonoBehaviour
         animator.SetBool(ANIMATION_PARAM_isHurt, false);
         isUnTouchable = false;
     }
+
+    private void OnDestroy()
+    {
+        UI_Information_Management.instance.Pause();
+    }
 }
