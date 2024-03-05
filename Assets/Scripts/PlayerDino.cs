@@ -14,24 +14,29 @@ public class PlayerDino : MonoBehaviour
     // const
     const string ANIMATION_PARAM_isRun = "isRun";
     const string ANIMATION_PARAM_isCrouch = "isCrouch";
-
+    const string ANIMATION_PARAM_isHurt = "isHurt";
     [SerializeField]
     bool isUnTouchable = false;
 
     [SerializeField]
     float jumpForce = 8f;
+
+    [SerializeField]
+    float speedForce = 7f;
     [SerializeField]
     float gravity = 9.81f * 1.5f;
     // GetAxisRaw
     float horizontal;
 
     // information
-    public int healContainer { get; private set; } = 3;
-    public int healPoint { get; private set; }
+    public int healContainer = 3;
+    [SerializeField]
+    public int healPoint;
 
     private void Awake()
     {
         healPoint = healContainer;
+        isUnTouchable = false;
 
         character = GetComponent <CharacterController>();
         animator = GetComponent<Animator>();
@@ -67,11 +72,11 @@ public class PlayerDino : MonoBehaviour
             }
             if(horizontal > 0.001)
             {
-                direction = jumpForce * Vector3.right;
+                direction = speedForce * Vector3.right;
             }
             if (horizontal < -0.001)
             {
-                direction = jumpForce * Vector3.left;
+                direction = speedForce * Vector3.left;
             }
             if (Input.GetKey(KeyCode.LeftControl))
             {
@@ -99,6 +104,8 @@ public class PlayerDino : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        UI_Information_Panel_Controller.instance.UpdateInformation();
+        StartCoroutine(AnimationIsHurt());
     }
     public void IncreaseHeal(int heal)
     {
@@ -108,6 +115,15 @@ public class PlayerDino : MonoBehaviour
             return;
         }
         healPoint += heal;
+        UI_Information_Panel_Controller.instance.UpdateInformation();
     }
-    // 
+    // handle animation
+    IEnumerator AnimationIsHurt()
+    {
+        isUnTouchable = true;
+        animator.SetBool(ANIMATION_PARAM_isHurt, true);
+        yield return new WaitForSeconds(1.5f);
+        animator.SetBool(ANIMATION_PARAM_isHurt, false);
+        isUnTouchable = false;
+    }
 }

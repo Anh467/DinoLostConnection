@@ -6,10 +6,12 @@ public class Obstacle : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField]
+    float positionY;
+    [SerializeField]
     float speed;
     void Start()
     {
-        
+        transform.position = new Vector3(transform.position.x, positionY);
     }
 
     // Update is called once per frame
@@ -23,6 +25,7 @@ public class Obstacle : MonoBehaviour
         if(other.gameObject.tag == "Player")
         {
             Debug.Log("Player");
+            PlayerDino.instance.TakeDamage(1);
         }
     }
 }
