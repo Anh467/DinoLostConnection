@@ -49,6 +49,7 @@ public class PlayerDino : MonoBehaviour
         {
             instance = this;
         }
+       
     }
     private void OnEnable()
     {
@@ -129,6 +130,7 @@ public class PlayerDino : MonoBehaviour
 
     private void OnDestroy()
     {
+        GameManager.instance.SaveScore();
         UI_Information_Management.instance.Pause();
     }
 }

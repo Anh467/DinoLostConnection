@@ -53,6 +53,7 @@ public class UI_Information_Management : MonoBehaviour
 
     public void Reload()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -65,5 +66,11 @@ public class UI_Information_Management : MonoBehaviour
     public void OnExitButtonClick()
     {
         Application.Quit();
+    }
+
+    public void LoadMenuScene()
+    {
+        Time.timeScale = 1;
+        GameManager.instance.LoadScene("Menu");
     }
 }
